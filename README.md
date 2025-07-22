@@ -40,3 +40,22 @@ Rajesh R (UIC) and Padmanabhan Rajan (IIT Mandi)
 conda create -n girnet python=3.8
 conda activate girnet
 pip install -r requirements.txt
+```
+
+### 2. Prepare dataset (For Training)
+
+
+### 3. Training
+
+```
+python CM_Generate.py \
+  --data_clean /path/to/Ytrain.npy \
+  --data_mixed /path/to/CM_Xtrain.npy \
+  --dim 1024 \
+  --n_examples 4 \
+  --batch_size 2 \
+  --epochs 20 \
+  --threshold 0.7 \
+  --save_path results/girnet_model.h5 \
+  --save_full_model
+```
