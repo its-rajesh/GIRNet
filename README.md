@@ -8,7 +8,7 @@ GIRNet is a neural network architecture designed for interference reduction in l
 This repository contains the official implementation for the paper:
 
 **GIRNet: A Graph-Based Interference Reduction in Live Microphone Recordings**  
-Rajesh R (UIC) and Padmanabhan Rajan (IIT Mandi)  
+Rajesh R and Padmanabhan Rajan (IIT Mandi)  
 [[Paper]](paper/GIRNET.pdf) | [[Audio Demos]](https://its-rajesh.github.io/rajesh/papers/girnet)
 
 ---
