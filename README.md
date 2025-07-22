@@ -22,16 +22,6 @@ Rajesh R (UIC) and Padmanabhan Rajan (IIT Mandi)
 
 ---
 
-## Folder Overview
-
-- `scripts/`: Main training and testing code (GIRNet, GAT, data pipeline)
-- `data/`: Add your dataset here. Expects waveform `.wav` files.
-- `results/`: Stores model predictions and logs
-- `notebooks/`: Jupyter notebooks for visualization and testing
-- `paper/`: PDF of the published manuscript
-
----
-
 ## Quick Start
 
 ### 1. Install dependencies
@@ -48,14 +38,6 @@ pip install -r requirements.txt
 ### 3. Training
 
 ```
-python CM_Generate.py \
-  --data_clean /path/to/Ytrain.npy \
-  --data_mixed /path/to/CM_Xtrain.npy \
-  --dim 1024 \
-  --n_examples 4 \
-  --batch_size 2 \
-  --epochs 20 \
-  --threshold 0.7 \
-  --save_path results/girnet_model.h5 \
-  --save_full_model
+python CM_Generate.py --data_clean /path/to/Ytrain.npy --data_mixed /path/to/CM_Xtrain.npy  --dim 1024 --n_examples 4 --batch_size 2  --epochs 20  --threshold 0.7  --save_path results/girnet_model.h5  --save_full_model
 ```
+
