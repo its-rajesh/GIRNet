@@ -90,7 +90,7 @@ This will create arrays you can adapt to `[N, C, T, 1]` for training.
 python GAT.py \
   --data_clean /path/to/Ytrain.npy \
   --data_mixed /path/to/CM_Xtrain.npy \
-  --dim 1024 \
+  --dim 220448 \
   --n_examples 4 \
   --batch_size 2 \
   --epochs 20 \
@@ -103,7 +103,7 @@ python GAT.py \
 
 * `--data_clean` (str, required)  Path to `Ytrain.npy`
 * `--data_mixed` (str, required)  Path to `CM_Xtrain.npy`
-* `--dim` (int, default **1024**) Input frame length per example
+* `--dim` (int, default **220448**) Input length per example. Ideally fs*10sec.
 * `--n_examples` (int, default **2**) Subset size to load (for quick runs)
 * `--batch_size` (int, default **1**)
 * `--epochs` (int, default **30**)
