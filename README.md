@@ -27,7 +27,7 @@ Rajesh R, Padmanabhan Rajan (IIT Mandi)
 GIRNet/
 ├─ GAT.py              # Model + CLI to train GIRNet
 ├─ getAudio.py         # Blocks/utilities used by the model
-├─ CM\_Generate.py      # (Optional) example for synthesizing mixtures with bleed
+├─ CM\_Generate.py      # (Important) example for synthesizing mixtures with bleed
 ├─ paper/GIRNET.pdf    # Paper
 └─ README.md
 
@@ -70,7 +70,7 @@ Where **N**: examples, **C**: channels (default 4), **T**: samples per clip.
 > np.save('Ytrain.npy', Y)
 > ```
 
-### (Optional) Synthesizing mixtures
+### (Important) Synthesizing mixtures
 
 `CM_Generate.py` shows how to create room-simulated mixtures with bleed (via `pyroomacoustics`). Edit parameters inside and run:
 
@@ -159,12 +159,7 @@ model.load_weights("GAT_weights.h5")
 If you use GIRNet in your research, please cite:
 
 ```bibtex
-@inproceedings{girnet2025,
-  title     = {GIRNet: Graph-Based Interference Reduction in Live Microphone Recordings},
-  author    = {Rameshbabu, Rajesh and Rajan, Padmanabhan},
-  year      = {2025},
-  note      = {GitHub: https://github.com/its-rajesh/GIRNet}
-}
+Under review
 ```
 
 ---
@@ -173,26 +168,6 @@ If you use GIRNet in your research, please cite:
 
 This project is released under the **MIT License**. See [LICENSE](LICENSE).
 
-```
-
----
-
-## Ready-made files
-
-- [README.md](sandbox:/mnt/data/girnet_pack/README.md)
-- [requirements.txt](sandbox:/mnt/data/girnet_pack/requirements.txt)
-- [notebooks/inference.ipynb](sandbox:/mnt/data/girnet_pack/notebooks/inference.ipynb)
-- [scripts/train_example.sh](sandbox:/mnt/data/girnet_pack/scripts/train_example.sh)
-- [scripts/eval_example.sh](sandbox:/mnt/data/girnet_pack/scripts/eval_example.sh)
-- [`.gitignore`](sandbox:/mnt/data/girnet_pack/.gitignore)
-
-### How to use
-1) Copy `README.md` into your repo root (replace existing).  
-2) Add `requirements.txt`, `notebooks/inference.ipynb`, `scripts/` and `.gitignore` to the repo.  
-3) Commit and push.
-
-Want me to tune the exact `requirements.txt` pins for your current local CUDA/TensorFlow setup, or add a tiny `makefile` with `make train` / `make eval` targets?
-```
 
 
 
