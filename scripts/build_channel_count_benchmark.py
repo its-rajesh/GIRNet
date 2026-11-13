@@ -104,7 +104,7 @@ def build_split(source_rows: list[dict], channels: int) -> tuple[list[dict], dic
             "graph_pattern_id": pattern,
             "edge_levels_db": levels.tolist(),
             # Trainer compatibility: this is explicitly the strongest directed
-            # edge, not a claimed single physical level for the whole mixture.
+            # edge, not a single physical level for the whole mixture.
             "nominal_bleed_db": float(off_diagonal.max()),
             "strongest_edge_level_db": float(off_diagonal.max()),
             "mean_edge_level_db": float(off_diagonal.mean()),

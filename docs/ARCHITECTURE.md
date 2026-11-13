@@ -39,7 +39,8 @@ correlation on held-out tracks and bleed levels.
 HSIC is computed between node representations using bottleneck frames as the
 samples. At most 64 evenly spaced frames are used to bound quadratic kernel
 cost. The RBF bandwidth uses the detached median nonzero pairwise distance.
-HSIC is an optional regularizer and must be ablated; it is not assumed helpful.
+HSIC is an optional regularizer. Its measured effect is reported in the
+controlled loss-ablation results under `results/loss_ablations/`.
 
 All SI-SDR, STFT, adjacency, and HSIC calculations are forced to float32 even
 when separator convolutions use mixed precision. Training stops before an
@@ -49,5 +50,5 @@ optimizer step if either the total loss or any gradient becomes non-finite.
 
 `local`, `tac`, `attention`, and `girnet` use the same encoder and decoder. They
 test the cross-stem mechanism under a largely capacity-controlled backbone.
-External methods—LDWT, cGANIR, CAE, KAMIR, and HTDemucs—are independent paper
-baselines and are never used as GIRNet components.
+External methods—LDWT, cGANIR, CAE, KAMIR, and HTDemucs—are independent
+comparison systems and are never used as GIRNet components.

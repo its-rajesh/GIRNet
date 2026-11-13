@@ -15,13 +15,13 @@
     </nav>
     <div class="hero-grid" id="top">
       <div>
-        <p class="eyebrow">IEEE Signal Processing Letters · supplementary material</p>
+        <p class="eyebrow">Research supplementary material</p>
         <h1>Directed-graph learning for interpretable microphone bleed reduction</h1>
         <p class="lede">GIRNet estimates which source leaks into which close microphone and uses the same directed edges to control the separator.</p>
         <p class="authors">Rajesh Rameshbabu · Santhosh Reddy · Ryan M. Corey · Padmanabhan Rajan</p>
         <div class="actions"><a class="primary" href="https://github.com/its-rajesh/GIRNet">Code and protocols</a><a href="#audio">Listen to examples</a></div>
       </div>
-      <aside class="claim">
+      <aside class="dataset-summary">
         <span>Principal heterogeneous test set</span>
         <strong>50 songs · 4,500 mixtures</strong>
         <span>All nine directed path levels coexist in every mixture.</span>
@@ -49,7 +49,7 @@
         <div><strong>85.75%</strong><span>pair-order accuracy</span></div>
         <div><strong>44.51%</strong><span>strongest-edge accuracy</span></div>
       </div>
-      <figure class="wide"><img src="figures/graph_claim.png" alt="Graph recovery, interventions, and loss ablations"><figcaption>Graph recovery, fixed-weight interventions, and controlled loss ablations. Intervals resample complete songs.</figcaption></figure>
+      <figure class="wide"><img src="figures/graph_evidence.png" alt="Graph recovery, interventions, and loss ablations"><figcaption>Graph recovery, fixed-weight interventions, and controlled loss ablations. Intervals resample complete songs.</figcaption></figure>
       <div class="finding-grid">
         <article><h3>Direction matters</h3><p>Transposing the oracle graph changes only edge direction and lowers SI-SDRi by 7.437 dB relative to the predicted graph. Shuffling directed edge identities lowers it by 6.366 dB.</p></article>
         <article><h3>Supervision creates fidelity</h3><p>Removing adjacency supervision leaves SI-SDRi statistically unresolved but reduces graph correlation from 0.810 to 0.587 and doubles edge MAE.</p></article>
@@ -81,7 +81,7 @@
 
     <section class="scope">
       <h2>Scope</h2>
-      <p>The current implementation assumes four ordered microphones and segment-constant paths. HTDemucs remains the strongest aggregate separator; GIRNet's contribution is the task-coupled directed bleed estimate and the ability to intervene on it.</p>
+      <p>The current implementation assumes four ordered microphones and segment-constant paths. HTDemucs has the highest aggregate separation scores in the external comparison. GIRNet additionally produces a task-coupled directed bleed estimate that can be replaced or perturbed during fixed-weight interventions.</p>
     </section>
   </main>
   <footer><span>GIRNet research supplementary material</span><a href="https://github.com/its-rajesh/GIRNet">Reproducibility repository</a></footer>

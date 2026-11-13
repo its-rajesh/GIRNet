@@ -19,13 +19,13 @@ half-width computed by treating all 3,600 source estimates as independent. That
 assumption is too optimistic because four stems, two crops, and nine bleed
 conditions are repeated within each of 50 songs. A deterministic 20,000-draw
 track-cluster bootstrap gives a 95% interval of **[14.6629, 15.6750] dB**
-(approximately **±0.506 dB**). Paper results should use track-clustered
-uncertainty and identify the resampling unit.
+(approximately **±0.506 dB**). Track-clustered uncertainty is the primary
+reporting method in the current evaluation code, with the complete song as the
+resampling unit.
 
 SIR and SAR are not an implementation of `museval`/BSS Eval v4. They are
-ordered, full-segment least-squares source-projection metrics. They are valid as
-defined, but the paper and every baseline must use that precise name and common
-implementation.
+ordered, full-segment least-squares source-projection metrics. All reported
+systems use this common implementation.
 
 ## Frozen reference ledger
 
@@ -71,9 +71,9 @@ Observed absolute-path overlap:
 - Train versus official test: 0 songs
 - Validation versus official test: 0 songs
 
-The training metadata records train and validation hashes but not the test
-manifest hash. Future evaluation metadata must store checkpoint, config, and
-test-manifest hashes together.
+The historical training metadata records train and validation hashes but not
+the test-manifest hash. The current evaluation provenance stores checkpoint,
+configuration, and test-manifest hashes together.
 
 ### Evaluation artifacts
 
@@ -88,10 +88,9 @@ test-manifest hashes together.
 - Songs: 50
 - Stems: vocals, drums, bass, other
 
-The current evaluator does not save prediction waveforms because
-`evaluation.save_predictions` is false. Future experiments should either save
-predictions or save sufficient checkpoint/manifests hashes and regenerate them
-deterministically.
+The historical evaluator does not save prediction waveforms because
+`evaluation.save_predictions` is false. Checkpoint and manifest hashes provide
+the information needed to regenerate predictions deterministically.
 
 ## Dataset and waveform contract
 
@@ -151,8 +150,7 @@ subspace define target, interference, and artifact components respectively.
 - SAR: projected four-source-subspace energy / residual artifact energy
 
 This is an ordered global source-projection evaluator. It does not use
-time-varying distortion filters and should not be labeled simply as standard
-BSS Eval without qualification.
+time-varying distortion filters and is distinct from standard BSS Eval.
 
 ### Improvement and aggregation
 
@@ -167,11 +165,10 @@ The summary implementation reports:
 - population standard deviation (`ddof=0`);
 - normal-approximation 95% CI using sample standard deviation (`ddof=1`).
 
-The mean calculations are correct. The row-independent CI is not appropriate
-as the primary paper uncertainty because test rows are clustered within songs.
-All future tables should use song-level cluster bootstrap confidence intervals.
-If multiple training seeds are available, between-seed variability must be
-reported separately rather than pooled into the within-test-set interval.
+The mean calculations are correct. The row-independent CI does not account for
+test rows clustered within songs. Current aggregate results therefore use
+song-level cluster-bootstrap confidence intervals. Between-seed variability,
+when available, is reported separately from within-test-set uncertainty.
 
 ## Adjacency evaluation
 
@@ -189,9 +186,9 @@ Current result:
 - MAE: 6.71406 dB
 - RMSE: 8.37013 dB
 
-As with separation metrics, the current adjacency summary flattens correlated
-edges and examples. Future uncertainty should cluster by song, and results
-should additionally be grouped by nominal level and directed source pair.
+The historical adjacency summary flattens correlated edges and examples.
+Current evaluations cluster uncertainty by song and also report groups by
+nominal level and directed source pair.
 
 ## Software and source snapshot
 
@@ -215,10 +212,9 @@ Core source hashes:
 - `scripts/train.py`: `115e1e575939000bccfae821695d923493b22434aa137b48cf9e1ab9ab507156`
 - `scripts/evaluate.py`: `787feb0a35e1cdc07e370ea80d1f09db0a988cd5b5c499dc45d2d4e609152e55`
 
-The V4 directory is not currently identified by a Git commit in this audit
-context. File hashes therefore provide the source snapshot for the frozen
-result. Before submission, the reproducibility package should be committed or
-archived with a manifest of file hashes.
+The V4 directory was not identified by a Git commit in the historical audit
+context. File hashes above provide the source snapshot for that frozen result.
+The public repository now supplies commit-addressable source revisions.
 
 The training script seeds Python, NumPy, and PyTorch, including CUDA, but does
 not request deterministic PyTorch algorithms or record all backend flags.
@@ -228,31 +224,22 @@ reproducible.
 ## Additional implementation observations
 
 1. Best-checkpoint selection uses the complete validation loss, which includes
-   SI-SDR, waveform, spectral, adjacency, HSIC, and identity terms. All learned
-   comparisons must preserve this selection rule or explicitly pre-register a
-   common replacement.
+   SI-SDR, waveform, spectral, adjacency, HSIC, and identity terms. Controlled
+   learned comparisons preserve this selection rule.
 2. Validation total loss contains a batch-level spectral-convergence ratio, so
    its exact value depends mildly on evaluation batch composition and size.
-   Keep validation batch size fixed across comparisons.
+   Validation batch size is fixed across controlled comparisons.
 3. The test set reuses each of two audio crops across nine bleed conditions.
-   This is intentional paired-condition testing, not leakage, but statistical
-   analysis must preserve the pairing or cluster by song.
+   This is intentional paired-condition testing, not leakage. Statistical
+   analysis preserves the pairing by clustering complete songs.
 4. Train crops from a song remain within the training split, so using multiple
    segments does not create cross-split song leakage.
 5. All six existing smoke/regression tests passed during the audit.
 
-## Required corrections before ablation training
+## Post-audit implementation status
 
-1. Add checkpoint/config/test-manifest hashes and software metadata to every
-   evaluation output directory.
-2. Add song-cluster bootstrap uncertainty without changing historical result
-   files; write corrected summaries as new artifacts.
-3. Label SIR/SAR as ordered global source-projection metrics.
-4. Save a source snapshot or Git commit identifier for future runs.
-5. Preserve the current evaluator and split while adding metadata and clustered
-   reporting; do not silently redefine the frozen reference result.
-6. Create distinct output directories and configuration files for every mode,
-   loss ablation, and seed so no checkpoint can overwrite another.
-
-Once these low-risk reporting and provenance changes are implemented and
-tested, architecture ablation training can begin.
+The current evaluation utilities add checkpoint, configuration, manifest, and
+software provenance; use complete-song cluster bootstrap intervals; retain the
+ordered global source-projection metric definitions; record a Git revision when
+available; preserve historical result files; and use distinct output
+directories for controlled modes, loss ablations, and seeds.

@@ -1,7 +1,8 @@
 # Convolutive pilot protocol
 
-This pilot validates data generation only. It is not a final training or test
-set and must not be used to tune a paper result.
+This pilot validates data generation only. It is separate from the final
+training, validation, and test manifests and is not used for hyperparameter
+selection.
 
 For source `j` and microphone `i`, pyroomacoustics generates raw RIR `r_ij`.
 The corresponding close microphone is placed 0.15–0.30 m from its source. The
@@ -23,10 +24,9 @@ The pilot crosses all nine levels with direct-path, 0.2, 0.4, 0.6, and 0.8 s
 requested RT60 conditions. Raw RIRs, effective RIRs, gains, geometry, requested
 and measured RT60, acoustic-path adjacency, signal-level bleed, normalization,
 source identity, and seeds are saved. All sixteen rendered component waveforms
-`contributions[i,j] = h_ij * s_j` are also stored. Convolutive SIR and SAR must
-use the four receiver-specific components for output `i`; using only the four
-diagonal targets would incorrectly count transfer-function differences as
-artifacts.
+`contributions[i,j] = h_ij * s_j` are also stored. Convolutive SIR and SAR use
+the four receiver-specific components for output `i`; using only the four
+diagonal targets incorrectly counts transfer-function differences as artifacts.
 
 For boundary-safe convolution, each dry crop is read with `max_rir_length - 1`
 samples of left and right context. Full convolution is performed and the
@@ -41,6 +41,3 @@ Required audit gates before scaling:
 - correct source/microphone indexing and diagonal target;
 - measured RT60 documented rather than assumed equal to requested RT60;
 - track- and room-disjoint full train/validation/test manifests.
-
-The accepted pilot and its failed predecessors are documented in
-`PILOT_AUDIT.md`.

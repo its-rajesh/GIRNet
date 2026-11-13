@@ -14,7 +14,6 @@ Rajan.
 
 - Supplementary website: <https://listeningtech.github.io/girnet/>
 - Existing audio-demo mirror: <https://its-rajesh.github.io/rajesh/papers/girnet/>
-- Manuscript status: in review at IEEE Signal Processing Letters
 
 ![GIRNet architecture](docs/figures/architecture.png)
 
@@ -159,11 +158,6 @@ are compressed and should not be treated as precision acoustic measurements.
 Saraga scores are reference-free, model-derived descriptors rather than
 measured contamination percentages. The current implementation assumes four
 ordered channels and segment-constant paths.
-
-## Citation
-
-The paper is currently in review. A BibTeX entry will be added after the
-manuscript is publicly available.
 
 ## Legacy implementation
 

@@ -20,11 +20,18 @@ All intervals below are 20,000-replicate complete-song cluster-bootstrap 95% con
 | Attention | 4.033 [3.836, 4.233] | 8.351 [7.986, 8.724] | 15.025 [14.823, 15.226] |
 | Paired GIRNet − attention | 0.035 [−0.051, 0.127] | **0.766** [0.545, 0.997] | **0.508** [0.341, 0.672] |
 
-Interpretation: GIRNet and attention are statistically tied on SI-SDRi. GIRNet has significantly greater interference rejection and lower out-of-subspace artifact energy under the ordered two-component target/residual projection. This supports a specific SIR/SAR advantage, not a blanket claim that GIRNet is the universally stronger separator.
+GIRNet and attention have a paired SI-SDRi difference of 0.035 dB with a 95%
+interval containing zero. GIRNet has 0.766 dB higher SIRi and 0.508 dB higher
+SAR under the ordered source-projection evaluator; both paired intervals exclude
+zero.
 
 ### External separator baselines
 
-The following models are frozen checkpoints selected without Moises/SDX data. HTDemucs, cGANIR, and CAE were adapted on the same heterogeneous convolutive MUSDB training/validation manifests used for the internal comparison; KAMIR uses the paper-style fixed K2 initialization (`niter=0`, `rho=0.1`). Every method is evaluated on the identical 194 songs, 970 crops, and 3,644 valid ordered source estimates.
+The following models are frozen checkpoints selected without Moises/SDX data.
+HTDemucs, cGANIR, and CAE were adapted on the same heterogeneous convolutive
+MUSDB training/validation manifests used for the comparison; KAMIR uses the
+fixed K2 configuration (`niter=0`, `rho=0.1`). Every method is evaluated on the
+identical 194 songs, 970 crops, and 3,644 valid ordered source estimates.
 
 | Model | SI-SDRi (dB) | SIRi (dB) | SAR (dB) |
 |---|---:|---:|---:|
@@ -43,7 +50,10 @@ Paired complete-song differences are reported as candidate minus GIRNet:
 | CAE − GIRNet | −6.762 [−7.080, −6.459] | −2.200 [−2.542, −1.866] | −8.694 [−9.048, −8.350] |
 | cGANIR − GIRNet | −8.156 [−8.363, −7.955] | −7.862 [−8.259, −7.481] | −8.873 [−9.156, −8.588] |
 
-HTDemucs is the strongest separator on this external set and significantly exceeds GIRNet in all three metrics. GIRNet significantly exceeds cGANIR, CAE, and KAMIR, but these comparisons do not support a state-of-the-art separation claim. The defensible contribution remains the joint directed-graph estimate and graph-conditioned separation, supported by the controlled graph-recovery and intervention experiments.
+HTDemucs has the highest SI-SDRi, SIRi, and SAR on this set. Its paired
+differences relative to GIRNet are +3.883, +7.393, and +1.627 dB, respectively,
+with all three intervals excluding zero. GIRNet exceeds cGANIR, CAE, and KAMIR
+in the paired comparisons shown above.
 
 ## GIRNet by source
 
@@ -67,7 +77,9 @@ The level below is measured from the aligned data as `10 log10(E[SDX residual] /
 | [−10, −5) dB | 1,524 | 4.221 [3.996, 4.455] | 9.090 | 15.645 |
 | ≥ −5 dB | 1,158 | 5.029 [4.706, 5.349] | 10.303 | 11.154 |
 
-The separator's benefit rises monotonically with effective contamination. At the weakest level the SI-SDRi interval includes zero, so no benefit should be claimed there. At ≥−5 dB GIRNet also exceeds attention in paired SI-SDRi by 0.247 dB [0.039, 0.477].
+Mean SI-SDRi rises monotonically across these effective-contamination groups.
+At the weakest level the SI-SDRi interval includes zero. At ≥−5 dB, GIRNet
+exceeds attention in paired SI-SDRi by 0.247 dB [0.039, 0.477].
 
 ## Robustness and graph evidence
 
@@ -76,25 +88,17 @@ The separator's benefit rises monotonically with effective contamination. At the
 - Sources flagged for pre-existing MoisesDB bleed: SI-SDRi 3.882 dB [3.415, 4.369].
 - Predicted receiver graph burden versus measured aggregate contamination: Pearson r = 0.312; Spearman ρ = 0.329 over 3,644 valid source estimates.
 
-The graph association is modest but positive on an unseen filtered-corruption family. Because SDXDB23 does not distribute the random per-edge filter and gain metadata, it is not edge-level graph-recovery accuracy and does not establish physical calibration. The controlled MUSDB and Sanidha experiments remain the proper evidence for adjacency recovery.
+The graph association is modest but positive on an unseen filtered-corruption
+family. SDXDB23_Bleeding contains synthetic, filtered, and scaled corruption;
+it is not a real-microphone recording set. Because the dataset does not
+distribute the random per-edge filter and gain metadata, these correlations are
+not edge-level graph-recovery measurements and do not establish physical
+calibration.
 
-## Recommended SPL claim
+## Repository contents
 
-> On the independent SDXDB23_Bleeding corruption set, the frozen GIRNet improves SI-SDR by 4.07 dB and SIR by 9.12 dB across 194 songs. It is tied with matched attention in SI-SDR improvement, while providing significantly higher SIR improvement (+0.77 dB) and SAR (+0.51 dB). Its predicted graph burden also shows a modest positive association with measured aggregate contamination.
-
-The paper must also state that matched HTDemucs is stronger on SDXDB23 (7.95 dB SI-SDRi and 16.51 dB SIRi). Do not position GIRNet as the best external separator; position it as an interpretable graph-estimating system that remains competitive with the non-HTDemucs baselines.
-
-Do not call SDXDB23 real microphone bleed: its bleed is synthetic, filtered, and scaled. Its value is independent-dataset and corruption-mechanism validation. Sanidha and Saraga should continue to carry the real-recording/domain-transfer story.
-
-## Artifacts
-
-- Figure: `../report/figures/sdxdb23_external_validation.pdf`
-- Dataset audit and manifest: `dataset_audit.json`, `manifest.jsonl`
-- GIRNet metrics and matching final-script provenance: `girnet_zero_shot_verified/`
-- Attention metrics and provenance: `attention_zero_shot/`
-- Paired confidence intervals: `girnet_vs_attention_verified/`
-- External baseline metrics, provenance, and paired intervals: `htdemucs_matched_zero_shot/`, `cganir_matched_zero_shot/`, `cae_matched_zero_shot/`, `kamir_k2_zero_shot_corrected/`
-- Five-model box plot: `../manuscript/figures/sisdr_boxplot_moises_models.pdf`
-- Preparation/evaluation/plot scripts: `scripts/prepare_moises_sdxdb23.py`, `scripts/evaluate_moises_sdxdb23.py`, `scripts/evaluate_moises_baseline.py`, `scripts/compare_moises_sdxdb23.py`, `scripts/plot_moises_sdxdb23.py`
+This directory contains the protocol and aggregate numerical results. The
+public code repository does not redistribute MoisesDB/SDXDB23 audio, model
+checkpoints, or locally generated per-example evaluation files.
 
 Official descriptions: [MoisesDB repository](https://github.com/moises-ai/moises-db), [SDX'23 challenge paper](https://doi.org/10.5334/tismir.171).
