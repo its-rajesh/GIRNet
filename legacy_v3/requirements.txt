@@ -1,0 +1,9 @@
+numpy
+scipy
+librosa
+tensorflow==2.13.0
+keras
+matplotlib
+soundfile
+pyroomacoustics
+scikit-learn

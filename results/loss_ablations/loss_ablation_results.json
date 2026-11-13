@@ -1,0 +1,6 @@
+{
+  "experiments": [
+    "girnet_no_adj_seed1337",
+    "girnet_no_hsic_seed1337"
+  ]
+}

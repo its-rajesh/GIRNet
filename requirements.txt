@@ -1,9 +1,6 @@
-numpy
-scipy
-librosa
-tensorflow==2.13.0
-keras
-matplotlib
-soundfile
-pyroomacoustics
-scikit-learn
+numpy>=2.0
+PyYAML>=6.0
+pyroomacoustics>=0.10.1
+scipy>=1.12
+soundfile>=0.12
+torch>=2.4

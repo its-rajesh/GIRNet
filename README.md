@@ -1,173 +1,172 @@
-# GIRNet: Graph-Based Interference Reduction in Live Microphone Recordings
+# GIRNet V4
 
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-ff6f00)
-![Spektral](https://img.shields.io/badge/Spektral-1.x-0b6cfb)
-![License](https://img.shields.io/badge/license-MIT-green)
+Official research code for **GIRNet: Directed-Graph Learning for Interpretable
+Microphone Bleed Reduction**.
 
-GIRNet is a **time-domain multichannel** network that combines a **Wave-U-Net encoder–decoder** with a **Graph Attention (GAT) bottleneck** to reduce microphone bleed in live multitrack recordings. The graph is built from inter-channel similarity and used to suppress interference while preserving the target channel.
+GIRNet is an end-to-end waveform separator for ordered close-microphone
+recordings. It estimates a segment-level directed graph in which
+`A[i, j]` represents source `j` leaking into microphone `i`, then uses those
+same edge values to weight cross-microphone message passing. The graph is not
+row-normalized and is supervised from known acoustic paths in simulated data.
 
-**Paper:** *GIRNet: A Graph-Based Interference Reduction in Live Microphone Recordings*  
-Rajesh R, Padmanabhan Rajan (IIT Mandi)  
-[[PDF]](paper/GIRNET.pdf) · [[Audio Demos]](https://its-rajesh.github.io/rajesh/papers/girnet)
+**Authors:** Rajesh Rameshbabu, Santhosh Reddy, Ryan M. Corey, and Padmanabhan
+Rajan.
 
----
+- Supplementary website: <https://listeningtech.github.io/girnet/>
+- Existing audio-demo mirror: <https://its-rajesh.github.io/rajesh/papers/girnet/>
+- Manuscript status: in preparation for IEEE Signal Processing Letters
 
-## Highlights
--  **Graph Attention bottleneck** modeling inter-source relations
--  Operates on **raw waveforms** (no phase estimation)
--  Optional post-processing: **hard masks** / **spectral subtraction**
--  Simple CLI: train with NumPy `.npy` arrays for **mixtures** and **clean** targets
+![GIRNet architecture](docs/figures/architecture.png)
 
----
+## Main verified results
+
+The principal test set contains 4,500 five-second convolutive mixtures from 50
+held-out MUSDB18HQ songs. Each mixture contains all nine directed path levels
+from -40 to 0 dB across its 12 off-diagonal edges.
+
+| Result | Value |
+|---|---:|
+| SI-SDR improvement | 5.447 dB |
+| SIR improvement | 12.152 dB |
+| Graph correlation | 0.810 |
+| Pair-order accuracy | 85.75% |
+| Strongest-edge accuracy | 44.51% (8.33% chance) |
+| Edge MAE | 5.29 dB |
+
+With separator weights fixed, replacing the predicted graph by the oracle
+improves SI-SDRi by 0.484 dB. Transposing the oracle graph lowers SI-SDRi by
+7.437 dB, while shuffling its directed edge values lowers it by 6.366 dB. These
+interventions show that the separator uses source-to-microphone edge identity
+and direction, not only the multiset of edge magnitudes.
+
+See [`results/transpose_intervention`](results/transpose_intervention) for the
+20,000-replicate complete-song bootstrap results and provenance.
 
 ## Repository layout
+
+```text
+girnet/                       model, losses, data, metrics, provenance
+configs/                      canonical GIRNet and controlled variants
+scripts/                      manifest generation, training, evaluation
+tests/                        CPU-only smoke and reporting tests
+docs/                         architecture and experimental protocols
+results/                      aggregate results and provenance
+legacy_v3/                    archived TensorFlow/GAT prototype
 ```
 
-GIRNet/
-├─ GAT.py              # Model + CLI to train GIRNet
-├─ getAudio.py         # Blocks/utilities used by the model
-├─ CM\_Generate.py      # (Important) example for synthesizing mixtures with bleed
-├─ paper/GIRNET.pdf    # Paper
-└─ README.md
-
-````
-
----
+The current PyTorch V4 implementation is independent of the archived V3
+prototype. External methods such as HTDemucs, cGANIR, CAE, and KAMIR are
+comparison systems only; GIRNet does not use their architectures or weights.
 
 ## Installation
-```bash
-# Python 3.8+ (conda recommended)
-conda create -n girnet python=3.8 -y
-conda activate girnet
 
-# Install deps
-pip install --upgrade pip wheel
-pip install -r requirements.txt
-````
-
-> **GPU:** Install the TensorFlow build matching your CUDA/CuDnn. See TF’s compatibility table if needed.
-
----
-
-## Data format
-
-Training uses **NumPy arrays**:
-
-* **Mixtures**  → `CM_Xtrain.npy` of shape **\[N, C, T, 1]**
-* **Clean**     → `Ytrain.npy`    of shape **\[N, C, T, 1]** (or `[N, 1, T, 1]` if single target)
-
-Where **N**: examples, **C**: channels (default 4), **T**: samples per clip.
-
-> If your arrays are `[N, C, T]`, add the trailing channel dimension:
->
-> ```python
-> X = np.load('CM_Xtrain.npy')
-> Y = np.load('Ytrain.npy')
-> if X.ndim == 3: X = X[..., None]
-> if Y.ndim == 3: Y = Y[..., None]
-> np.save('CM_Xtrain.npy', X)
-> np.save('Ytrain.npy', Y)
-> ```
-
-### (Important) Synthesizing mixtures
-
-`CM_Generate.py` shows how to create room-simulated mixtures with bleed (via `pyroomacoustics`). Edit parameters inside and run:
+Python 3.10 or later is recommended.
 
 ```bash
-python CM_Generate.py
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-This will create arrays you can adapt to `[N, C, T, 1]` for training.
+Install the PyTorch build appropriate for the local CUDA version when GPU
+training is required.
 
----
+## Data preparation
 
-## Quick start
+The code reads an independently obtained copy of official MUSDB18HQ. Audio is
+not redistributed by this repository.
 
-### 1) Train
+First index the official stems, then build the uniform convolutive protocol and
+disjoint room banks:
 
 ```bash
-python GAT.py \
-  --data_clean /path/to/Ytrain.npy \
-  --data_mixed /path/to/CM_Xtrain.npy \
-  --dim 220448 \
-  --n_examples 4 \
-  --batch_size 2 \
-  --epochs 20 \
-  --threshold 0.7 \
-  --save_path results/girnet_model.h5 \
-  --save_full_model
+python scripts/build_manifest.py \
+  --musdb-root /path/to/musdb18hq \
+  --output-dir manifests
+
+python scripts/build_convolutive_manifests.py \
+  --instantaneous-dir manifests \
+  --output-dir paper_spl/convolutive/full_v2
 ```
 
-**Arguments (`GAT.py`)**
+Then construct the balanced heterogeneous directed-edge manifests:
 
-* `--data_clean` (str, required)  Path to `Ytrain.npy`
-* `--data_mixed` (str, required)  Path to `CM_Xtrain.npy`
-* `--dim` (int, default **220448**) Input length per example. Ideally fs*10sec.
-* `--n_examples` (int, default **2**) Subset size to load (for quick runs)
-* `--batch_size` (int, default **1**)
-* `--epochs` (int, default **30**)
-* `--threshold` (float, default **0.6**) Cosine-similarity threshold for graph adjacency
-* `--save_path` (str, default `GAT_weights.h5`) Where to save model/weights
-* `--save_full_model` (flag) Save the **full Keras model** (recommended for inference)
-
-### 2) Inference / Evaluation
-
-Use the notebook provided: [`notebooks/inference.ipynb`](notebooks/inference.ipynb)
-Or minimal Python:
-
-```python
-import numpy as np
-from tensorflow.keras.models import load_model
-from GAT import GraphAttentionLayer  # custom layer
-from spektral.layers import GATConv
-
-# Load the full model you saved during training:
-model = load_model(
-    "results/girnet_model.h5",
-    custom_objects={"GraphAttentionLayer": GraphAttentionLayer, "GATConv": GATConv}
-)
-
-X = np.load("CM_Xtest.npy")          # shape [N, C, T, 1] (or add ... None)
-if X.ndim == 3: X = X[..., None]
-Y_hat = model.predict(X, batch_size=1)
-np.save("Y_hat.npy", Y_hat)
+```bash
+python scripts/build_heterogeneous_manifests.py \
+  --source-dir paper_spl/convolutive/full_v2 \
+  --output-dir paper_spl/convolutive/heterogeneous_v1
 ```
 
-If you saved **weights only**, rebuild the architecture before loading weights:
+Every directed edge assumes every level across each split, while every mixture
+contains all nine levels. Train, validation, and test songs and room banks are
+disjoint.
 
-```python
-from GAT import build_girnet_model
+## Training
 
-model = build_girnet_model(input_shape=1024, channels=4, threshold=0.6)
-model.load_weights("GAT_weights.h5")
+```bash
+python scripts/train.py --config configs/girnet_heterogeneous.yaml
 ```
 
----
+The canonical configuration uses 5-s, 44.1-kHz segments, AdamW, BF16
+autocast, effective batch size 4, at most 200 epochs, and validation-only early
+stopping. Output checkpoints and histories are excluded from Git.
 
-## Tips & Notes
+Controlled exchange variants use the same encoder and decoder:
 
-* **Channels (`C`)**: default is **4** in `build_girnet_model`. If your data uses a different `C`, pass it when rebuilding for inference.
-* **Adjacency**: `--threshold` tunes the graph sparsity (lower ⇒ denser; higher ⇒ sparser).
-* **Post-processing**: after prediction, you can apply hard masks / spectral subtraction before writing WAVs.
-* **Reproducibility**: set NumPy/TF seeds and pin versions (see `requirements.txt`).
+- `local`: no cross-microphone exchange;
+- `tac`: transform-average-concatenate exchange;
+- `attention`: four-head self-attention;
+- `girnet`: supervised directed edges and graph-weighted exchange.
 
----
+## Evaluation and graph interventions
+
+```bash
+python scripts/evaluate_convolutive.py \
+  --manifest paper_spl/convolutive/heterogeneous_v1/test.jsonl \
+  --checkpoint runs/convolutive_heterogeneous/girnet_bf16/best.pt \
+  --output-dir evaluations/girnet
+
+python scripts/evaluate_graph_interventions.py \
+  --manifest paper_spl/convolutive/heterogeneous_v1/test.jsonl \
+  --checkpoint runs/convolutive_heterogeneous/girnet_bf16/best.pt \
+  --output-dir evaluations/interventions
+
+python scripts/evaluate_graph_transpose_intervention.py \
+  --manifest paper_spl/convolutive/heterogeneous_v1/test.jsonl \
+  --checkpoint runs/convolutive_heterogeneous/girnet_bf16/best.pt \
+  --output-dir evaluations/transpose_intervention
+```
+
+Evaluation provenance records checkpoint and manifest hashes, configuration,
+metric definitions, software versions, model size, source ordering, sampling
+rate, counts, and random seeds. Confidence intervals resample complete songs;
+paired comparisons reuse the same sampled songs.
+
+## Verification
+
+The lightweight tests use synthetic tensors and require neither MUSDB18HQ nor
+a GPU:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## Interpretation limits
+
+The learned graph is reliable for ranking directed paths, but its dB estimates
+are compressed and should not be treated as precision acoustic measurements.
+Saraga scores are reference-free, model-derived descriptors rather than
+measured contamination percentages. The current implementation assumes four
+ordered channels and segment-constant paths.
 
 ## Citation
 
-If you use GIRNet in your research, please cite:
+The paper is currently in preparation. A BibTeX entry will be added after the
+manuscript is publicly available.
 
-```bibtex
-Under review
-```
+## Legacy implementation
 
----
-
-## License
-
-This project is released under the **MIT License**. See [LICENSE](LICENSE).
-
-
-
-
+The original TensorFlow/Spektral prototype is retained under
+[`legacy_v3/`](legacy_v3/) for historical reference. It is not used to produce
+the V4 results reported above.

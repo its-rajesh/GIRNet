@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Supplementary results and audio examples for GIRNet, a directed-graph model for interpretable microphone bleed reduction.">
+  <title>GIRNet — Interpretable Microphone Bleed Reduction</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <nav>
+      <a class="brand" href="#top">GIRNet</a>
+      <div><a href="#method">Method</a><a href="#evidence">Evidence</a><a href="#audio">Audio</a><a href="https://github.com/its-rajesh/GIRNet">Code</a></div>
+    </nav>
+    <div class="hero-grid" id="top">
+      <div>
+        <p class="eyebrow">IEEE Signal Processing Letters · supplementary material</p>
+        <h1>Directed-graph learning for interpretable microphone bleed reduction</h1>
+        <p class="lede">GIRNet estimates which source leaks into which close microphone and uses the same directed edges to control the separator.</p>
+        <p class="authors">Rajesh Rameshbabu · Santhosh Reddy · Ryan M. Corey · Padmanabhan Rajan</p>
+        <div class="actions"><a class="primary" href="https://github.com/its-rajesh/GIRNet">Code and protocols</a><a href="#audio">Listen to examples</a></div>
+      </div>
+      <aside class="claim">
+        <span>Principal heterogeneous test set</span>
+        <strong>50 songs · 4,500 mixtures</strong>
+        <span>All nine directed path levels coexist in every mixture.</span>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="method" class="split">
+      <div>
+        <p class="eyebrow">Method</p>
+        <h2>One graph, two responsibilities</h2>
+        <p>For edge <em>j→i</em>, the model estimates the relative acoustic path from source <em>j</em> into microphone <em>i</em>. Those unnormalized edge values are both reported as the bleed graph and used to weight cross-microphone bottleneck messages.</p>
+        <p>The output is an additive waveform correction. Source order is fixed; no permutation-invariant training is used.</p>
+      </div>
+      <figure><img src="figures/architecture.png" alt="GIRNet signal model and graph-weighted architecture"><figcaption>Signal model, edge estimation, and graph-weighted exchange.</figcaption></figure>
+    </section>
+
+    <section id="evidence">
+      <p class="eyebrow">Controlled evidence</p>
+      <h2>The graph is recoverable and functionally used</h2>
+      <div class="metrics">
+        <div><strong>5.447 dB</strong><span>SI-SDR improvement</span></div>
+        <div><strong>0.810</strong><span>within-mixture graph correlation</span></div>
+        <div><strong>85.75%</strong><span>pair-order accuracy</span></div>
+        <div><strong>44.51%</strong><span>strongest-edge accuracy</span></div>
+      </div>
+      <figure class="wide"><img src="figures/graph_claim.png" alt="Graph recovery, interventions, and loss ablations"><figcaption>Graph recovery, fixed-weight interventions, and controlled loss ablations. Intervals resample complete songs.</figcaption></figure>
+      <div class="finding-grid">
+        <article><h3>Direction matters</h3><p>Transposing the oracle graph changes only edge direction and lowers SI-SDRi by 7.437 dB relative to the predicted graph. Shuffling directed edge identities lowers it by 6.366 dB.</p></article>
+        <article><h3>Supervision creates fidelity</h3><p>Removing adjacency supervision leaves SI-SDRi statistically unresolved but reduces graph correlation from 0.810 to 0.587 and doubles edge MAE.</p></article>
+        <article><h3>Calibration is limited</h3><p>The graph reliably orders paths, but its dB range is compressed. Estimated scores are not precision acoustic transfer measurements.</p></article>
+      </div>
+    </section>
+
+    <section class="split external">
+      <div>
+        <p class="eyebrow">External validation</p>
+        <h2>Carnatic recordings test a different musical domain</h2>
+        <p>Leave-one-performance-out Sanidha adaptation reaches 8.421 dB SI-SDRi and retains graph correlation 0.771. On reference-free Saraga concerts, the calibrated graph exposes stable asymmetric structure, with mridangam→ghatam the strongest population-median direction.</p>
+        <p class="caution">Saraga quantities are model-derived relative descriptors, not measured contamination percentages.</p>
+      </div>
+      <figure><img src="figures/carnatic.png" alt="Sanidha graph recovery and Saraga population graph"><figcaption>Sanidha held-out graph recovery and the Saraga population-median graph.</figcaption></figure>
+    </section>
+
+    <section id="audio">
+      <p class="eyebrow">Audio demonstrations</p>
+      <h2>Real concert microphones</h2>
+      <p>Reference-free Saraga examples compare the recorded microphone signal with the GIRNet output. Because isolated ground truth is unavailable, these clips support listening and qualitative inspection only.</p>
+      <div class="audio-grid">
+        <article><h3>Example 1 · vocals</h3><label>Input</label><audio controls preload="none" src="https://its-rajesh.github.io/rajesh/audios/girnet/ex1/bvocal.wav"></audio><label>GIRNet</label><audio controls preload="none" src="https://its-rajesh.github.io/rajesh/audios/girnet/ex1/mvocal.wav"></audio></article>
+        <article><h3>Example 1 · violin</h3><label>Input</label><audio controls preload="none" src="https://its-rajesh.github.io/rajesh/audios/girnet/ex1/bviolin.wav"></audio><label>GIRNet</label><audio controls preload="none" src="https://its-rajesh.github.io/rajesh/audios/girnet/ex1/mviolin.wav"></audio></article>
+        <article><h3>Example 1 · mridangam</h3><label>Input</label><audio controls preload="none" src="https://its-rajesh.github.io/rajesh/audios/girnet/ex1/bmridangam.wav"></audio><label>GIRNet</label><audio controls preload="none" src="https://its-rajesh.github.io/rajesh/audios/girnet/ex1/mmridangam.wav"></audio></article>
+      </div>
+      <p class="more"><a href="https://its-rajesh.github.io/rajesh/papers/girnet/">Additional Saraga examples →</a></p>
+    </section>
+
+    <section class="scope">
+      <h2>Scope</h2>
+      <p>The current implementation assumes four ordered microphones and segment-constant paths. HTDemucs remains the strongest aggregate separator; GIRNet's contribution is the task-coupled directed bleed estimate and the ability to intervene on it.</p>
+    </section>
+  </main>
+  <footer><span>GIRNet research supplementary material</span><a href="https://github.com/its-rajesh/GIRNet">Reproducibility repository</a></footer>
+</body>
+</html>

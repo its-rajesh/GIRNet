@@ -1,0 +1,293 @@
+{
+  "adjacency": {
+    "correlation_db": 0.8022724298244179,
+    "mae_db": 5.288039207458496,
+    "rmse_db": 7.784869194030762
+  },
+  "by_source": {
+    "oracle": {
+      "bass": {
+        "bootstrap_std": 0.37202907747131403,
+        "ci95_high": 7.36358916480281,
+        "ci95_low": 5.906074633214896,
+        "independent_songs": 50,
+        "mean": 6.621958103953705,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "drums": {
+        "bootstrap_std": 0.3801963635150701,
+        "ci95_high": 5.067860845682436,
+        "ci95_low": 3.5750112289105074,
+        "independent_songs": 50,
+        "mean": 4.346295173682684,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "other": {
+        "bootstrap_std": 0.3151626136388619,
+        "ci95_high": 5.172534863691952,
+        "ci95_low": 3.941572243744937,
+        "independent_songs": 50,
+        "mean": 4.562988487785682,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "vocals": {
+        "bootstrap_std": 0.3559225196161391,
+        "ci95_high": 8.884033449425397,
+        "ci95_low": 7.481090552070866,
+        "independent_songs": 50,
+        "mean": 8.193951458044763,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      }
+    },
+    "predicted": {
+      "bass": {
+        "bootstrap_std": 0.36669078570156766,
+        "ci95_high": 6.9631032298126705,
+        "ci95_low": 5.534782369397284,
+        "independent_songs": 50,
+        "mean": 6.236823389829706,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "drums": {
+        "bootstrap_std": 0.3796772968777862,
+        "ci95_high": 4.702108092668149,
+        "ci95_low": 3.209413585916352,
+        "independent_songs": 50,
+        "mean": 3.9934828499099733,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "other": {
+        "bootstrap_std": 0.3534123766763202,
+        "ci95_high": 4.7563800406228856,
+        "ci95_low": 3.375262418104227,
+        "independent_songs": 50,
+        "mean": 4.091936469061507,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "vocals": {
+        "bootstrap_std": 0.32371355246139527,
+        "ci95_high": 8.096157654051042,
+        "ci95_low": 6.8242937290446415,
+        "independent_songs": 50,
+        "mean": 7.46737224428542,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      }
+    },
+    "shuffled_oracle": {
+      "bass": {
+        "bootstrap_std": 0.45207227268809114,
+        "ci95_high": -1.940748686089659,
+        "ci95_low": -3.71200346135781,
+        "independent_songs": 50,
+        "mean": -2.813124701998649,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "drums": {
+        "bootstrap_std": 0.33441925696770824,
+        "ci95_high": 1.3535581030453736,
+        "ci95_low": 0.04981210239750821,
+        "independent_songs": 50,
+        "mean": 0.7190598591405667,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "other": {
+        "bootstrap_std": 0.32344913167816114,
+        "ci95_high": -0.057932785937381,
+        "ci95_low": -1.3243725933351147,
+        "independent_songs": 50,
+        "mean": -0.6801845196320727,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "vocals": {
+        "bootstrap_std": 0.3503120596313494,
+        "ci95_high": -0.23163449581027493,
+        "ci95_low": -1.612905417670439,
+        "independent_songs": 50,
+        "mean": -0.8995832140806855,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      }
+    },
+    "transposed_oracle": {
+      "bass": {
+        "bootstrap_std": 0.45157957394565684,
+        "ci95_high": -1.518683437529911,
+        "ci95_low": -3.2956775134781235,
+        "independent_songs": 50,
+        "mean": -2.3903307900700406,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "drums": {
+        "bootstrap_std": 0.40172537950022125,
+        "ci95_high": 0.5560587301229712,
+        "ci95_low": -1.0156909316105738,
+        "independent_songs": 50,
+        "mean": -0.2041654287372585,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "other": {
+        "bootstrap_std": 0.34170885378394833,
+        "ci95_high": -1.7565072331513791,
+        "ci95_low": -3.092711968369095,
+        "independent_songs": 50,
+        "mean": -2.4097981003930067,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      },
+      "vocals": {
+        "bootstrap_std": 0.3479207953034324,
+        "ci95_high": -2.300590172627807,
+        "ci95_low": -3.655988351627936,
+        "independent_songs": 50,
+        "mean": -2.955929788102189,
+        "mixtures": 4500,
+        "source_estimates": 4500
+      }
+    }
+  },
+  "inference": {
+    "oracle": {
+      "milliseconds_per_mixture": 54.07983681580259,
+      "total_seconds": 243.35926567111164
+    },
+    "predicted": {
+      "milliseconds_per_mixture": 53.55156277761691,
+      "total_seconds": 240.9820324992761
+    },
+    "shuffled_oracle": {
+      "milliseconds_per_mixture": 54.09881243130399,
+      "total_seconds": 243.44465594086796
+    },
+    "transposed_oracle": {
+      "milliseconds_per_mixture": 54.05135380228361,
+      "total_seconds": 243.23109211027622
+    }
+  },
+  "interventions": {
+    "oracle": {
+      "sisdr_improvement": {
+        "bootstrap_std": 0.16865771091076434,
+        "ci95_high": 6.267209949284584,
+        "ci95_low": 5.60160563071322,
+        "independent_songs": 50,
+        "mean": 5.931298305866709,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      },
+      "sisdr_out": {
+        "bootstrap_std": 0.2289546786682567,
+        "ci95_high": 13.211531876432076,
+        "ci95_low": 12.313068939468813,
+        "independent_songs": 50,
+        "mean": 12.794587794512406,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      }
+    },
+    "predicted": {
+      "sisdr_improvement": {
+        "bootstrap_std": 0.1799661944530892,
+        "ci95_high": 5.797144239433464,
+        "ci95_low": 5.095623293659834,
+        "independent_songs": 50,
+        "mean": 5.447403738271651,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      },
+      "sisdr_out": {
+        "bootstrap_std": 0.2509878619603896,
+        "ci95_high": 12.762140828597682,
+        "ci95_low": 11.783553289097089,
+        "independent_songs": 50,
+        "mean": 12.31069322691735,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      }
+    },
+    "shuffled_oracle": {
+      "sisdr_improvement": {
+        "bootstrap_std": 0.17019026062233705,
+        "ci95_high": -0.5931502648620274,
+        "ci95_low": -1.2588731863299656,
+        "independent_songs": 50,
+        "mean": -0.9184581441427102,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      },
+      "sisdr_out": {
+        "bootstrap_std": 0.23060527447117662,
+        "ci95_high": 6.3556442833307845,
+        "ci95_low": 5.451416009510016,
+        "independent_songs": 50,
+        "mean": 5.944831344502988,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      }
+    },
+    "transposed_oracle": {
+      "sisdr_improvement": {
+        "bootstrap_std": 0.16669334647858564,
+        "ci95_high": -1.6735028624807553,
+        "ci95_low": -2.325558051774288,
+        "independent_songs": 50,
+        "mean": -1.990056026825624,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      },
+      "sisdr_out": {
+        "bootstrap_std": 0.24389145735982803,
+        "ci95_high": 5.308025368479651,
+        "ci95_low": 4.350715937577619,
+        "independent_songs": 50,
+        "mean": 4.8732334618200746,
+        "mixtures": 4500,
+        "source_estimates": 18000
+      }
+    }
+  },
+  "method": "complete-song percentile cluster bootstrap",
+  "paired_vs_predicted": {
+    "oracle": {
+      "bootstrap_std": 0.06431553601630233,
+      "ci95_high": 0.6134845186042486,
+      "ci95_low": 0.3607872060803887,
+      "independent_songs": 50,
+      "mean": 0.4838945675950575,
+      "mixtures": 4500,
+      "source_estimates": 18000
+    },
+    "shuffled_oracle": {
+      "bootstrap_std": 0.17373974202128084,
+      "ci95_high": -6.030255938692698,
+      "ci95_low": -6.710475602630259,
+      "independent_songs": 50,
+      "mean": -6.365861882414362,
+      "mixtures": 4500,
+      "source_estimates": 18000
+    },
+    "transposed_oracle": {
+      "bootstrap_std": 0.18746173211451367,
+      "ci95_high": -7.073543198767756,
+      "ci95_low": -7.807856411841319,
+      "independent_songs": 50,
+      "mean": -7.437459765097275,
+      "mixtures": 4500,
+      "source_estimates": 18000
+    }
+  },
+  "replicates": 20000,
+  "seed": 1337
+}

@@ -1,0 +1,51 @@
+seed: 1337
+
+data:
+  kind: convolutive
+  train_manifest: paper_spl/convolutive/full_v2/train.jsonl
+  val_manifest: paper_spl/convolutive/full_v2/val.jsonl
+  test_manifest: paper_spl/convolutive/full_v2/test.jsonl
+  sample_rate: 44100
+  segment_samples: 220500
+  stems: [vocals, drums, bass, other]
+  peak: 0.98
+
+model:
+  mode: girnet
+  channels: 4
+  base_channels: 32
+  depth: 4
+  kernel_size: 9
+  bottleneck_blocks: 4
+  attention_heads: 4
+  edge_hidden: 128
+
+loss:
+  sisdr_weight: 1.0
+  l1_weight: 1.0
+  mrstft_weight: 0.1
+  adjacency_weight: 5.0
+  hsic_weight: 0.01
+  identity_weight: 1.0
+  identity_threshold_db: -35.0
+  hsic_max_frames: 64
+  fft_sizes: [512, 1024, 2048]
+
+training:
+  output_dir: runs/convolutive/girnet_bf16
+  epochs: 200
+  batch_size: 2
+  accumulation_steps: 2
+  num_workers: 2
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  grad_clip: 5.0
+  patience: 20
+  amp: true
+  amp_dtype: bfloat16
+
+evaluation:
+  batch_size: 2
+  num_workers: 2
+  output_dir: paper_spl/convolutive/evaluations/girnet_bf16
+  save_predictions: false
