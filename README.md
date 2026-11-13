@@ -13,7 +13,6 @@ row-normalized and is supervised from known acoustic paths in simulated data.
 Rajan.
 
 - Supplementary website: <https://listeningtech.github.io/girnet/>
-- Existing audio-demo mirror: <https://its-rajesh.github.io/rajesh/papers/girnet/>
 
 ![GIRNet architecture](docs/figures/architecture.png)
 
