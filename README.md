@@ -1,4 +1,4 @@
-# GIRNet V4
+# GIRNet
 
 Official research code for **GIRNet: Directed-Graph Learning for Interpretable
 Microphone Bleed Reduction**.
@@ -14,7 +14,7 @@ Rajan.
 
 - Supplementary website: <https://listeningtech.github.io/girnet/>
 - Existing audio-demo mirror: <https://its-rajesh.github.io/rajesh/papers/girnet/>
-- Manuscript status: in preparation for IEEE Signal Processing Letters
+- Manuscript status: in review at IEEE Signal Processing Letters
 
 ![GIRNet architecture](docs/figures/architecture.png)
 
@@ -162,7 +162,7 @@ ordered channels and segment-constant paths.
 
 ## Citation
 
-The paper is currently in preparation. A BibTeX entry will be added after the
+The paper is currently in review. A BibTeX entry will be added after the
 manuscript is publicly available.
 
 ## Legacy implementation
